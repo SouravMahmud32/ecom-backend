@@ -13,15 +13,26 @@ connectDB();
 
 const app = express();
 
+// CORS configuration
+const allowedOrigins = ['https://ecom-frontend-xi-six.vercel.app']; // Frontend domain
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
 
-// Middleware for CORS and JSON parsing
-app.use(cors());
+// Middleware for parsing JSON
 app.use(express.json());
 
 // Session middleware (required if using Passport sessions)
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-session-secret', // Secure your session secret
+  secret: process.env.SESSION_SECRET || 'your-session-secret',
   resave: false,
   saveUninitialized: false,
 }));
@@ -40,8 +51,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'em
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login', session: false }),
   (req, res) => {
-    // Successful authentication, redirect or return token
-    const token = req.user.token; // Make sure you set token in passport strategy
+    const token = req.user.token;
     res.redirect(`/login/callback?token=${token}`);
   }
 );
