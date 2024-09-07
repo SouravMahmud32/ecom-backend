@@ -54,7 +54,7 @@ const googleAuthSuccess = async (req, res) => {
 
   const token = generateToken(req.user._id);
   // redirect to the frontend and send the token
-  res.redirect(`http://localhost:3001/login/callback?token=${token}`);
+  res.redirect(`https://ecom-frontend-xi-six.vercel.app/login/callback?token=${token}`);
 };
 
 module.exports = { registerUser, loginUser, googleAuthSuccess };
