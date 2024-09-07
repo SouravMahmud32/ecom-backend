@@ -53,7 +53,7 @@ const googleAuthSuccess = async (req, res) => {
   }
 
   const token = generateToken(req.user._id);
-  // You can redirect to the frontend and send the token
+  // redirect to the frontend and send the token
   res.redirect(`http://localhost:3001/login/callback?token=${token}`);
 };
 
